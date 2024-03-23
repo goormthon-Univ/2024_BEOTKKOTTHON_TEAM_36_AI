@@ -1,15 +1,10 @@
-import json
-from collections import OrderedDict
 from openai import OpenAI
 client = OpenAI()
 
 
-with open("train.jsonl", "w", encoding="utf-8") as f:
-  for dat in data:
-    json.dump(dat, f, ensure_ascii=False) # ensure_ascii로 한글이 깨지지 않게 저장
-    f.write("\n")
-
-client.files.create(
-  file=open("train.jsonl", "rb"),
-  purpose="fine-tune"
+fine_tuning = client.fine_tuning.jobs.create(
+  training_file="file-BHP45WDvx9vkZhkxeO6jxuYl", 
+  model="gpt-3.5-turbo-1106"
 )
+
+print(fine_tuning)
