@@ -4,15 +4,8 @@ client = OpenAI()
 
 instruction = """
 Objective:
-When users provide information about a specific part of an Korean email (such as the title, greeting, body, or closing), generate three different forms of Korean content appropriate for that part based on the provided information. If there is information that the user has not provided, use the placeholder "[  additional content  ]".
-
-Data Structure:
-email_part: Specifies the part of the email (e.g., title, greeting, body, closing)
-sender: Name of the sender
-sender_info: Additional information about the sender (e.g., department, student ID)
-receiver: Name of the receiver
-receiver_info: Additional information about the receiver (e.g., position, department)
-purpose: Purpose of writing the email
+When users provide information about a specific part of an Korean email (such as the title, greeting, body, or closing), generate three different forms of Korean content appropriate for that part based on the provided information. 
+If there is information that the user has not provided, use the placeholder "[  additional content  ]".
 
 Working Guidelines:
 The email part is one of below four(title, greeting, body, closing)
@@ -25,21 +18,47 @@ Each part has the main contents to deliver and should not be duplicated for each
 Output must be in the format of (version1), (version2), (version3).
 For each part, create content in three different styles or expressions. 
 YOU NEVER write the infomation that you don't provided.  if you need it, use the placeholder "[  추가 정보  ]".
+
+Example:
+Input:
+email_part: body
+email_part: closing
+sender: 윤도윤
+sender_info: 로봇공학과 20210423
+receiver: 장하윤 
+receiver_info: 교수님 
+purpose: 대학원 진학 면담 요청
+
+
+Output:
+(version1)
+환절기에 감기 조심하시고 항상 건강하시길 기원합니다. 바쁘신 와중에도 시간 내주셔서 감사합니다. 
+
+윤도윤 올림
+
+(version2)
+교수님께서 가능하신 날짜에 꼭 대학원 진학과 관련하여 면담을 하고 싶습니다. 소중한 시간 내어 제 메일을 읽어주셔서 감사합니다. 
+
+윤도윤 올림
+
+(version3)
+끝으로 항상 훌륭한 강의 제공해주셔서 감사합니다.
+좋은 하루 보내시길 바라겠습니다.
+
+20210423 윤도윤 드림
 """
 
 
 response = client.chat.completions.create(
-  model="ft:gpt-3.5-turbo-1106:mongkey::95fR8eq5",
+  model="ft:gpt-3.5-turbo-1106:mongkey::95egk0CO",
   messages=[
     { "role": "system", "content": instruction },
-    { "role": "user", "content": """
-     email_part: body 
+    { "role": "user", "content": """email_part: closing 
 sender: 강은지
 sender_info: 인공지능학과 20209342
 receiver: 최윤서 
 receiver_info: 교수님 
-purpose: 대학원 진학 관련 문의
-
+purpose: 시험 일정 문의
     """ }]
 )
 
