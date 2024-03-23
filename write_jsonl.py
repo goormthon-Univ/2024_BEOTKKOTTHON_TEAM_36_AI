@@ -4,408 +4,172 @@ from openai import OpenAI
 client = OpenAI()
 
 instruction = """
-SYSTEM:
 You are Korean Mail text generator AI for college students based on input information ‘sender, sender_info, receiver, receiver_info, purpose’
-- You definitely divide it into (title), (greeting), (body), and (closing).
-- Your text should always be polite.
-- If you need to include specific information other than the input information, you have to write it in the form of [  additional information  ].
+- You should divide it into (title), (greeting), (body), and (closing). You NEVER missing out any of these
+- Your text should always be very polite.
+- NEVER put in the fact of a user YOU DON'T KNOW. If you need to include specific information other than the input information, you have to write it in the form of [  additional information  ].
+
+Each part(title, greeting, body, closing) has the main contents to deliver and should not be duplicated for each part.
+- title: The title must be concise and clear and include the purpose of the email 
+The title begins with [email purpose]. It is "purpose" of the input.
+- greeting: greeting must include the sender's self-introduction, including student number and name.
+- body: You create the text according to the purpose of the email. Yopu should write as politely as possible and put the reciever's intention first. You Don't need self introduction 
+- closing:  You should include a thank you at the end. And You must match the format of the sender's name 드림 or sender's name 올림.
 """
 
+
 data = [
-  {
-    "messages": [
-      { "role": "system", "content": instruction },
-      { "role": "user", "content": """
-      sender: 신짱구
-      sender_info: 컴퓨터공학과 20학번 
-      receiver: 이민수 
-      receiver_info: 교수님 
-      purpose: 증원 요청 """
-    }, 
-    { "role": "assistant", "content": """
-    (title)
-    [증원 요청] 컴퓨터공학과 20학번 신짱구입니다.
-    
+ {"messages": [{"role": "system", "content": instruction },
+              {"role": "user", "content": """sender: 김지수
+sender_info: 환경공학과 20220341
+receiver: 이다민 
+receiver_info: 교수님 
+purpose: 증원 요청 
+"""}, 
+              {"role": "assistant", "content": """(title)
+[  과목명  ] 증원 관련 문의 드립니다. 시각디자인과 20220341 이유리
 
-    (greeting)
-    이민수 교수님, 안녕하세요.
-    저는 컴퓨터공학과 20학번 신짱구입니다.
-    일교차가 심한 요즈음, 몸 건강히 잘 지내고 계신지요? 늘 건강하시기를 기원합니다. 
-    
-    
-    (body)
-    다름이 아니라, 이렇게 메일을 보내게 된 이유는 [  과목명  ] 수업 증원을 부탁드리기 위해서 입니다.  
-    
-    저는 [  과목명  ] 수업에 관심이 많아 이전부터 이번 학기에 꼭 수강하고 싶었습니다. 
-    수강 신청 내내 노력하였지만 모든 수업에 정원이 가득 차 실례인 줄 앎에도 불구하고 증원 요청을 드리고자 합니다. 
-    
-    저는 [  과목명  ] 수업의 강의 내용 중  [  수업에서 다루는 것  ] 에 특히 관심이 많습니다. 교수님께서 기회를 주신다면 성실하고 열정적으로 수업에 참여할 준비가 되어있습니다. 이번 수업은 저의 진로에도 큰 도움이 될 것입니다. 또한, 교수님과 수업내용에 관하여 개인적으로 찾아뵙고 질문을 드려도 될 지 문의드립니다.
-    이번 학기 수강 인원 증원을 고려해 주실 수 있으실까요? 조심스럽지만 추후 수강인원을 늘릴 계획이 있으시다면 알려주시면 감사하겠습니다. 정중히 부탁드립니다.
+(greeting)
+안녕하세요, 이다민 교수님.
+저는 환경공학과에 재학중인 20220341 김지수입니다.
 
-    
-    (closing)
-    바쁘신데도 불구하고 메일을 읽어주셔서 감사합니다.
-    학교에서 늘 귀한 강의 들려 주시는 교수님께 감사드리며 더 많은 학생이 교수님의 수업을 들을 수 있기를 바랍니다. 건강하시기를 늘 소망합니다. 
-    
-    감사합니다.
+(body)
+다름이 아니라, [  과목명  ] 수업과 관련하여 수강인원 증원이 가능할지 여쭙고 싶어 이렇게 메일 드립니다. 
 
-    신짱구 드림
-      """ }
-    ]
-  },
+교수님의 강의계획서를 보고 [  수업에서 다루는 것  ]에 대한 관심이 생겨 이번 학기 해당 과목을 수강함으로써 관련 분야에 대한 식견을 넓히고 싶습니다.
 
-  {
-    "messages": [
-      { "role": "system", "content": instruction },
-      { "role": "user", "content": """
-      sender: 이유리
-      sender_info: 시각디자인과 201922033
-      receiver: 최강철 
-      receiver_info: 교수님 
-      purpose: 증원 요청 
-      """ },
-      { "role": "assistant", "content": """
-      (title)
-      [  과목명  ] 증원 관련 문의 드립니다. 시각디자인과 201922033 이유리
-      
+이를 위해 학년별 수강신청, 전체 수강신청 등 수강신청 기간 내내 교수님의 수업을 신청하기 위해 노력했지만 경쟁률이 너무 높아 수강신청에 모두 실패하였고, 이렇게 증원 예정이 있으신지 여쭙게 되었습니다. 
 
-      (greeting)
-      안녕하세요. 최강철 교수님!
-      저는 시각디자인과에 재학중인 201922033 이유리입니다. 
-      
-      
-      (body)
-      다름이 아니라, [  과목명  ] 수업과 관련하여 수강인원 증원이 가능할지 여쭙고 싶어 이렇게 메일 드립니다. 
-  
-      교수님의 강의계획서를 보고 [  수업에서 다루는 것  ]에 대한 관심이 생겨 이번 학기 해당 과목을 수강함으로써 관련 분야에 대한 식견을 넓히고 싶습니다.
-      
-      이를 위해 학년별 수강신청, 전체 수강신청 등 수강신청 기간 내내 교수님의 수업을 신청하기 위해 노력했지만 경쟁률이 너무 높아 수강신청에 모두 실패하였고, 이렇게 증원 예정이 있으신지 여쭙게 되었습니다. 
-      
-      이미 많은 증원 요청 메일을 받으셨을 것이라고 생각하지만 수업이 절실한 학생들에게 기회를 주시면 정말 감사드리겠습니다. 
-      
-      
-      (closing)
-      바쁘신 와중에 메일 읽어주셔서 감사합니다. 
-      
-      이유리 올림
-      """ }
-    ]
-  },
+이미 많은 증원 요청 메일을 받으셨을 것이라고 생각하지만 수업이 절실한 학생들에게 기회를 주시면 정말 감사드리겠습니다. 
 
-  {
-    "messages": [
-      { "role": "system", "content": instruction },
-      { "role": "user", "content": """
-      sender: 이영민
-      sender_info: 사이버보안 19학번
-      receiver: 최기석
-      receiver_info: 교수님 
-      purpose: 진로 상담 면담 요청
-      """ },
-      { "role": "assistant", "content": """
-      (title)
-      [면담요청] 사이버보안 19학번 이영민 진로 상담 면담 요청드립니다. 
-      
-      
-      (greeting)
-      최기석 교수님 안녕하십니까, 
-      저는 사이버보안 19학번 이영민입니다. 
-      
+(closing)
+바쁘신 와중에 메일 읽어주셔서 감사합니다. 
 
-      (body)
-      졸업 후의 진로에 대해 고민하던 중 교수님의 [  연구/논문/수업  ]에서 [  특정 부분  ]에 특히 관심이 가서 해당 분야로의 진학이나 진로에 대한 교수님의 조언을 듣고 싶습니다.
-      연구와 강의로 많이 바쁘신 줄 잘 알고 있기에 면담을 요청드리기가 무척 송구스럽습니다. 하지만 잠깐이라도 시간을 내주신다면 석사 과정 진학에 대한 말씀 뿐만 아니라 진로에 관한 어떤 조언이라도 감사하게 새겨듣도록 하겠습니다.
-      
-      제 전화번호는 [  나의 전화번호  ]입니다. 
-      저는 [  날짜나 특정 시간대  ]를 제외하고는 언제든 가능합니다.교수님께서 괜찮으신 시간을 전화나 문자, 이메일로 알려주시면 그 시각에 맞춰 찾아뵙겠습니다.
-      
-      
-      (closing)
-      메일 읽어주셔서 감사합니다.
-      
-      이영민 올림.
-      """ }
-    ]
-  },
+김지수 올림
+"""}]},
+ {"messages": [{"role": "system", "content": instruction },
+              {"role": "user", "content": """sender: 김철수
+sender_info: 휴먼바이오기계공학과 19학번 
+receiver: 김민성 
+receiver_info: 교수님 
+purpose: 증원 요청 
+"""}, 
+              {"role": "assistant", "content": """(title)
+[증원 요청] 휴먼바이오기계공학과 19학번 김철수입니다.
+               
+(greeting)
+김민성 교수님, 안녕하세요.
+저는 휴먼바이오기계공학과 19학번 신짱구입니다. 기온 변화가 심한 요즈음, 몸 건강히 잘 지내고 계신지요? 늘 건강하시기를 기원합니다. 
+               
+(body)
+다름이 아니라, 이렇게 메일을 보내게 된 이유는 [  과목명  ] 수업 증원을 부탁드리기 위해서 입니다.  저는 [  과목명  ] 수업에 관심이 많아 이전부터 이번 학기에 꼭 수강하고 싶었습니다. 
+수강 신청 내내 노력하였지만 모든 수업에 정원이 가득 차 실례인 줄 앎에도 불구하고 증원 요청을 드리고자 합니다. 
+
+저는 [  과목명  ] 수업의 강의 내용 중  [  수업에서 다루는 것  ] 에 특히 관심이 많습니다. 교수님께서 기회를 주신다면 성실하고 열정적으로 수업에 참여할 준비가 되어있습니다. 이번 수업은 저의 진로에도 큰 도움이 될 것입니다. 또한, 교수님과 수업내용에 관하여 개인적으로 찾아뵙고 질문을 드려도 될 지 문의드립니다.
+이번 학기 수강 인원 증원을 고려해 주실 수 있으실까요? 조심스럽지만 추후 수강인원을 늘릴 계획이 있으시다면 알려주시면 감사하겠습니다.
+정중히 부탁드립니다.
 
 
-  {
-    "messages": [
-      { "role": "system", "content": instruction },
-      { "role": "user", "content": """
-      sender: 최이수
-      sender_info: 데이터분석전공 23학번
-      receiver: 하동민
-      receiver_info: 교수님 
-      purpose: 대학원 진학 문의
-      """ },
-      { "role": "assistant", "content": """
-      (title)
-      [면담 요청] 데이터분석전공 23학번 최이수  대학원 진학 관련 면담 요청 드립니다. 
+(closing)
+바쁘신데도 불구하고 메일을 읽어주셔서 감사합니다.
+학교에서 늘 귀한 강의 들려 주시는 교수님께 감사드리며 더 많은 학생이 교수님의 수업을 들을 수 있기를 바랍니다. 건강하시기를 늘 소망합니다. 
 
+감사합니다.
 
-      (greeting)
-      하동민 교수님 안녕하십니까, 
-      저는 데이터분석전공 23학번 최이수입니다. 
-      [  최근 날씨  ]에 몸 건강히 잘 지내고 계신지요?
-      
+김철수 드림
+"""}]},
+ {"messages": [{"role": "system", "content": instruction },
+              {"role": "user", "content": """sender: 박기호
+sender_info: 경제학과 17학번
+receiver: 정찬지
+receiver_info: 교수님 
+purpose: 미분적분학 증원 요청
+"""}, 
+              {"role": "assistant", "content": """(title
+[미분적분학] 증원 가능 여부에 대해 메일드립니다. (경제학과 17학번 박기호)
 
-      (body)
-      다름이 아니라, 교수님의 [  연구실  ]에 [  진학 과정  ] 과정으로 진학을 희망해 메일을 드립니다. 
+(greeting)
+안녕하세요, 정은지 교수님.
+저는 경제학과에 재학 중인 17학번 박기호라고 합니다.
 
-      저는 데이터분석을 전공하여 [  관심있는 분야  ]를 공부하던 중 [  추가적으로 공부한 부분  ]을 추가로 배우며 큰 흥미를 느꼈습니다.
-      특히 제게 [  관심있는 분야  ]에 흥미를 주신 하동민 교수님께 더 배우고 싶었고, 이에 [  연구 분야  ]를 연구하고자 진학을 희망하게 되었습니다.
-      
-      이에 [  진학 예정 연도  ]에 [  희망 포지션  ]TO가 있는지 여쭙고 싶습니다. 
-      또한 입학하기 전 제가 특히 부족한 부분들에 대해 조언을 받을 수 있다면 [  진학 과정   ]에 지원하는 데 있어 많은 도움이 될 거라는 생각에 이렇게 메일을 보내게 되었습니다. 
-      
-      
-      (closing)
-      바쁘신데도 불구하고 메일을 읽어주셔서 감사합니다.
-      늘 건강하시기를 소망합니다. 
-      
-      데이터분석전공 23학번 최이수 올림.
-      """ }
-    ]
-  },
+(body)
+다름이 아니라 제가 연락을 드린 이유는 미분적분학에 대하여 교수님께 실례가 되지 않는다면 수강 정원을 조금만 더 증원해주실 수 있는지 문의를 드리기 위해서입니다.
 
+저는 현재 [  관심 분야  ]에 많은 관심을 가지고 있고, 부족한 저의 안목을 더 키우기 위해 미분적분학 수업을 꼭 수강하여 심층적인 이해와 경험을 쌓아 저의 부족한 부분을 꼭 채우고 싶다는 마음이 있습니다. 
 
-  {
-    "messages": [
-      { "role": "system", "content": instruction },
-      { "role": "user", "content": """
-      sender: 김동동
-      sender_info: 화학공학과 1920449
-      receiver: 민기범
-      receiver_info: 교수님 
-      purpose: 학업 계획 면담 요청
-      
-      """ },
-      { "role": "assistant", "content": """
-      (title)
-      [면담요청] 화학공학과 1920449 김동동 학업 계획 관련 면담 요청드립니다. 
+수강 신청에 실패한건 온전한 저의 잘못임을 인정하오나, 교수님께서 넓은 아량을 베푸셔서 증원을 해주실 수 있는지 양해를 구하고 싶습니다.
 
+(closing)
+미분적분학을 수강할 기회를 주신다면 최선을 다해 수강하겠습니다. 
+바쁘신 와중에 긴 글 읽어주셔서 감사합니다.
 
-      (greeting)
-      민기범 교수님 안녕하세요. 
-      저는 화학공학과 1920449 김동동입니다. 
-      [  최근 날씨  ]에 몸 건강히 잘 지내고 계신지요?
-      
+박기호 올림
+"""}]},
+ {"messages": [{"role": "system", "content": instruction },
+              {"role": "user", "content": """sender: 강은지
+sender_info: 인공지능학과 20209342
+receiver: 최윤서 
+receiver_info: 교수님 
+purpose: 대학원 진학 문의
+"""}, 
+              {"role": "assistant", "content": """(title)
+[대학원] 교수님의 대학원 진학과 관련하여 면담 요청 드립니다. 
 
-      (body)
-      먼저, 교수님의 바쁜 일정 중에 이메일을 보내게 되어 죄송합니다. 이번 학기에 [  과목명. ] 강의를 듣고 있는데, 교수님의 깊이 있는 지식과 열정적인 강의에 많은 영감을 받고 있습니다.
-      
-      제가 이메일을 드린 주된 이유는 제 학업계획과 관련하여 교수님과 직접 면담을 통해 조언을 구하고 싶어서입니다. [  관심분야  ]에 대해 더 심도 있게 탐구하고, 이 분야에서의 전문성을 기르고자 하는 목표를 가지고 있습니다. 교수님께서는 이 분야에서 광범위한 지식과 경험을 가지고 계시기 때문에, 교수님의 조언이 저에게 큰 도움이 될 것이라고 생각합니다.
-      
-      이에 교수님께서 편하신 시간에 면담을 진행할 수 있는지 여쭙고 싶습니다. 교수님의 스케줄에 맞춰서 준비할 예정이니, 가능하신 날짜와 시간을 알려주시면 감사하겠습니다. 만약 이메일을 통한 조언도 가능하시다면, 그 방식으로도 제게 많은 도움이 될 것 같습니다.
-      
-      교수님의 회신을 기다리는 동안, 저는 계속해서 [ 과목명  ]에 열심히 참여하고, [ 관심분야  ]에 관한 제 지식을 넓혀 나가겠습니다.
-      
-      
-      (closing)
-      바쁘신데도 불구하고 메일을 읽어주셔서 감사합니다.
-      늘 건강하시기를 소망합니다. 
-      
-      김동동 드림.
-      """ }
-    ]
-  },
+(greeting)
+안녕하십니까 최윤서 교수님, 저는 인공지능학과에 재학 중인 20209342 강은지라고 합니다. 
+개인적으로 [  과목명  ]과 관련하여 관심있는 분야가 생겼는데 이에 대한 대학원을 알아보던 중 교수님께 조언을 구하고자 연락드렸습니다
 
-  {
-    "messages": [
-      { "role": "system", "content": instruction },
-      { "role": "user", "content": """
-      sender: 홍길동
-      sender_info: 신소재공학과 20221234
-      receiver: 김철수 
-      receiver_info: 교수님 
-      purpose: 시험 일정 문의
-      """ },
-      { "role": "assistant", "content": """
-      (title)
-      [  과목명  ] 시험 일정 문의드립니다. 신소재공학과 20221234 홍길동
-
-
-      (greeting)
-      교수님 안녕하세요, 저는 [  과목명  ] 강의를 수강하고 있는 신소재공학과 20221234 홍길동입니다. 
-      강의에 집중하며 많은 것을 배우고 있습니다. 감사드립니다.
-      
-      
-      (body)
-      다름이 아니라, 강의 계획서 및 강의 관련 공지사항에서 시험 일정에 대한 구체적인 정보를 찾지 못했습니다. 이에 시험 기간 및 방식에 대한 정보를 미리 알고 싶어 이렇게 메일을 보내게 되었습니다.
-      
-      시험 일정에 대한 정보를 알려주실 수 있으신지요? 
-      또한, 시험 준비에 있어 교수님께서 특별히 중점을 두시는 부분이 있다면 조언을 구하고 싶습니다. 이를 통해 더욱 철저히 준비하고자 합니다.
-      
-      
-      (closing)
-      교수님의 바쁘신 일정 속에서도 저의 메일 읽어주셔서 감사합니다. 
-      항상 건강 유의하시길 바라며, 좋은 하루 보내시길 기원합니다.
-      감사합니다. 
-
-      홍길동 올림.
-      """ }
-    ]
-  },
-
-  {
-    "messages": [
-      { "role": "system", "content": instruction },
-      { "role": "user", "content": """
-      sender: 임솔
-      sender_info: 신소재공학과 20221234
-      receiver: 김철수 
-      receiver_info: 교수님 
-      purpose: 성적 문의 
-      """ },
-      { "role": "assistant", "content": """
-      (title)
-      [성적문의] [  과목명  ] 관련 성적 문의드립니다. 신소재공학과 20221234 임솔
-
-      
-      (greeting)
-      김철수 교수님 안녕하세요, 
-      이번학기에 [  과목명  ]을 수강한 신소재공학과 20221234 임솔입니다.
-      우선, 이번 학기에 깊이 있는 강의를 제공해 주셔서 진심으로 감사드립니다.
-      
-      
-      (body)
-      다름이 아니라, 최근 공지된 성적에 대해 몇 가지 질문이 있어 이렇게 메일을 보내게 되었습니다. 
-      제 성적을 확인해보니, 예상했던 것과 다소 차이가 있어 어떤 부분에서 감점이 있었는지, 또는 제가 놓친 부분이 있는지 궁금합니다.
-      
-      가능하시다면, 세부적인 성적 구성(과제, 중간고사, 기말고사, 참여도 등)에 대한 피드백을 받을 수 있을까요? 이를 통해 앞으로 학습 방향을 조정하고, 부족한 부분을 보완하고자 합니다
-      성적에 대해 여쭤보는 것이 조심스럽지만, 교수님의 소중한 의견을 듣고 싶습니다.
-
-
-      (closing)
-      교수님의 바쁘신 일정 속에서도 저의 메일 읽어주셔서 감사합니다. 
-      항상 건강 유의하시길 바라며, 좋은 하루 보내시길 기원합니다.
-      감사합니다. 
-      
-      신소재공학과 20221234 임솔 드림.
-      """ }
-    ]
-  },
-
-  {
-    "messages": [
-      { "role": "system", "content": instruction },
-      { "role": "user", "content": """
-      sender: 이기민
-      sender_info: 사이버보안 19학번
-      receiver: 최기석
-      receiver_info: 교수님 
-      purpose: 수업 질문
-      """ },
-      { "role": "assistant", "content": """ 
-      (title)
-      [수업 질문] 사이버보안 19학번 이기민 진로 상담 면담 요청드립니다. 
-      
-      
-      (greeting)
-      최기석 교수님 안녕하십니까, 
-      저는 [  과목명 ]을 열심히 수강하고 있는 [학과명] 학생 [이름]입니다
-      먼저, 매 수업마다 열정적으로 지식을 전달해 주셔서 정말 감사드립니다. 교수님의 강의를 통해 많은 것을 배우고 있습니다.
-      
-
-      (body)
-      다름이 아니라, 최근 수업에서 다룬 [  질문 내용  ]에 대해 좀 더 깊이 이해하고 싶어 몇 가지 질문이 있습니다.
-      제 질문은 다음과 같습니다. 
-      [ 질문들 ]
-      
-      교수님께서 제 질문에 답변을 해주신다면, 해당 주제를 더 깊이 이해할 수 있을 것 같습니다. 
-      교수님의 바쁜 일정 속에서도 제 질문에 시간을 내어주신다면 감사하겠습니다. 
-      
-      
-      (closing)
-      언제나 좋은 강의로 학생들을 위해 헌신해주셔서 감사드립니다. 
-      오늘도 좋은 하루 되시기 바랍니다.
-      
-      이기민 올림.
-      """ }
-    ]
-  },
-  {
-  "messages": [
-    { "role": "system", "content": instruction },
-    { "role": "user", "content": """
-     sender: 김희철
-     sender_info: 국어국문학과 23학번
-     receiver: 김시화
-     receiver_info: 교수님 
-     purpose: 휴학 상담  """ },
-    { "role": "assistant", "content": """
-     (title)
-     [휴학 문의] 국어국문학과 23학번 김희철 휴학 관련 면담 요청 드립니다. 
-
-
-     (greeting)
-    김시화 교수님 안녕하세요
-    저는 국어국문학과 23학번 김희철입니다. 
-    국어국문학과에 재학 하며 좋은 수업을 듣고 저의 가치관과 생각을 발전시키는 좋은 기회를 얻을 수 있었습니다.
-
-
-    (body)
-    다름이 아니라, 제가 더 많은 기회를 얻고자 [  휴학 이유  ]를 위해 [  휴학 시기  ] 휴학을 계획하고 있습니다.
-    바쁘시겠지만, 교수님과 휴학 상담을 받을 수 있는지 문의 드립니다.
-    저는 [  날짜나 특정 시간대  ]를 제외하고는 언제든 가능합니다.
-
-
-    (closing)
-    바쁘신 와중에 메일을 읽어주셔서 감사합니다. 
-    편하신 시간에 답장해 주시면 감사하겠습니다.
-
-    국어국문학과 23학번 김희철 드림.
-    """ }
-  ]
-  },
-  {
-  "messages": [
-    { "role": "system", "content": instruction },
-    { "role": "user", "content": """sender: 김민주
-    sender_info: 인공지능학과 17학번
-    receiver: 장찬
-    receiver_info: 교수님 
-    purpose: 진로 상담 면담 요청""" },
-    { "role": "assistant", "content": """
-    (title)
-    [진로 상담 요청] 인공지능학과 17학번 김민주입니다. 
-
-     
-    (greeting)
-    안녕하세요, 장찬 교수님,
-    저는 인공지능학과에 재학 중인 17학번 김민주입니다 
-
-    
-    (body)
-    이번 학기에 교수님의 [  과목명  ] 수업을 듣고 있으며, 교수님의 귀중한 지식과 통찰력에서 많은 영감을 받았습니다. 그동안의 학습 경험을 바탕으로 제 진로에 대해 심도 깊게 고민하고 있으며, 교수님의 조언을 구하고 싶어 이렇게 메일을 보내게 되었습니다.
-
-    제가 특히 관심 있는 분야는 [  관심 분야  ]이며, 이와 관련하여 [  구체적인 진로  ]에 대한 꿈을 가지고 있습니다. 하지만 이 분야로 나아가기 위해 어떤 준비와 경험이 필요한지, 현실적인 진로 계획은 어떻게 세워야 할지 등에 대해 아직 확신이 서지 않아 고민이 많습니다.
-
-    이에 교수님께서 [  관심 분야  ] 관련 진로를 탐색하고 준비하는 데 있어서 중요한 사항들과 교수님께서 보시기에 제가 어떤 부분을 더 발전시켜야 할지에 대한 조언을 구하고자 합니다. 또한, 이 분야에서 필요한 전문 지식이나 기술, 추천해 주실 수 있는 인턴십이나 추가적으로 공부해야 할 사항 등에 대해서도 교수님의 의견을 여쭙고 싶습니다. 
-
-    제 전화번호는 [  나의 전화번호  ]입니다. 
-    저는  [  날짜나 특정 시간대  ]를 제외하고는 언제든 가능합니다. 교수님께서 괜찮으신 시간을 전화나 문자, 이메일로 알려주시면 그 시각에 맞춰 찾아뵙겠습니다. 
-
-    
-    (closing)
-    가능하시다면, 편하신 시간에 짧은 상담을 할 수 있을지 여쭙고 싶습니다. 
-    교수님의 답변을 기다리겠습니다. 
-    감사합니다.
-
-    김민주 올림""" }
-  ]
-}
-  
+(body)
+저는 현재 [  분야  ]에 흥미를 느껴 교수님의 [  과목명  ]을 수강하고 있습니다. 
+특히 [  수업내용  ] 에 있어 관련 내용을 좀 더 공부해보고자 대학원에 진학을 할지 말지 선택을 해야하는 상황에 놓여져 있습니다. 
+따라서 교수님과의 면담을 통해 이러한 저의 상황에 대해 조언을 구하고 방향성을 확고히 하고자 합니다.  
+               
+(closing)
+결론적으로 대학원 진학에 있어 교수님과의 면담을 통해 확실하게 정하고 싶다는 말 전해드립니다. 
+환절기에 감기 조심하시고 항상 건강하시길 기원합니다. 
+바쁘신 와중에도 시간 내주셔서 감사합니다.
+               
+최윤서 올림
+"""}]},
+ {"messages": [{"role": "system", "content": instruction },
+              {"role": "user", "content": """
+"""}, 
+              {"role": "assistant", "content": """
+"""}]},
+ {"messages": [{"role": "system", "content": instruction },
+              {"role": "user", "content": """
+"""}, 
+              {"role": "assistant", "content": """
+"""}]},
+ {"messages": [{"role": "system", "content": instruction },
+              {"role": "user", "content": """
+"""}, 
+              {"role": "assistant", "content": """
+"""}]},
+ {"messages": [{"role": "system", "content": instruction },
+              {"role": "user", "content": """
+"""}, 
+              {"role": "assistant", "content": """
+"""}]},
+ {"messages": [{"role": "system", "content": instruction },
+              {"role": "user", "content": """
+"""}, 
+              {"role": "assistant", "content": """
+"""}]},
+ {"messages": [{"role": "system", "content": instruction },
+              {"role": "user", "content": """
+"""}, 
+              {"role": "assistant", "content": """
+"""}]}
 ]
 
-with open("train.jsonl", "w", encoding="utf-8") as f:
+with open("train-v3.jsonl", "w", encoding="utf-8") as f:
   for dat in data:
     json.dump(dat, f, ensure_ascii=False) # ensure_ascii로 한글이 깨지지 않게 저장
     f.write("\n")
 
 file = client.files.create(
-  file=open("train.jsonl", "rb"),
+  file=open("train-v2.jsonl", "rb"),
   purpose="fine-tune"
 )
 
