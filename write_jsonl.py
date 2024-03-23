@@ -204,7 +204,7 @@ purpose: 진로 상담 면담 요청
 (closing)
 긴 메일 읽어주셔서 감사합니다.
                
-20204283 김지현 올림.              
+20204283 김지현 올림              
 """}]},
  {"messages": [{"role": "system", "content": instruction },
               {"role": "user", "content": """sender: 임성민
